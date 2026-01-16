@@ -1,0 +1,55 @@
+body {
+    background: #0a0a0a;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0a 0%, #2a1515 50%, #0a0a0a 100%);
+    z-index: 1;
+}
+
+/* Mosaic loader styles */
+.mosaic-root {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 100;
+}
+.mosaic-rect {
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(180deg, #0a0a0a 0%, #1a0a0a 20%, #3a1515 45%, #2a1515 55%, #8b4444 80%, #0a0a0a 100%);
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.13);
+    overflow: visible;
+    position: relative;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    backdrop-filter: blur(10px);
+    background-attachment: fixed;
+}
+.mosaic-rect.visible { opacity: 1; }
+.mosaic-tiles { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+.mosaic-tile {
+    position: absolute;
+    background: inherit;
+    background-clip: padding-box;
+    transform-origin: center center;
+    will-change: transform, opacity, right, top;
+    transition: transform 520ms cubic-bezier(.2,.9,.2,1), opacity 420ms ease, right 520ms cubic-bezier(.2,.9,.2,1), top 520ms cubic-bezier(.2,.9,.2,1);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
+}
+
+/* small visual tweak when assembled */
+.mosaic-rect.visible { box-shadow: 0 18px 50px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255,255,255,0.02); }
