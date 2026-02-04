@@ -172,51 +172,78 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }, 100);
   }
 
+  // Function to update sticker position relative to avatar frame
+  function updateStickerPosition(avatarFrame, stickerContainer) {
+    // Get computed styles to get actual dimensions
+    const avatarStyle = getComputedStyle(avatarFrame);
+    const stickerStyle = getComputedStyle(stickerContainer);
+    
+    // Get actual dimensions
+    const avatarWidth = parseFloat(avatarStyle.width);
+    const avatarHeight = parseFloat(avatarStyle.height);
+    const stickerWidth = parseFloat(stickerStyle.width);
+    const stickerHeight = parseFloat(stickerStyle.height);
+    
+    // Calculate responsive offset based on avatar size
+    // Use 5% of avatar size as offset, with minimum 5px and maximum 10px for closer positioning
+    const minOffset = 5;
+    const maxOffset = 10;
+    const baseOffset = Math.min(avatarWidth, avatarHeight) * 0.05;
+    const offset = Math.max(minOffset, Math.min(maxOffset, baseOffset));
+
+    // Calculate position to place sticker outside the top-left corner
+    const stickerTop = -offset;
+    const stickerLeft = -offset;
+
+    stickerContainer.style.top = stickerTop + 'px';
+    stickerContainer.style.left = stickerLeft + 'px';
+  }
+
   // Add NFT sticker function
   async function addNFTSticker(container, avatarFrame) {
     // Create container for Lottie animation
     const stickerContainer = document.createElement('div');
-    stickerContainer.className = 'nft-sticker-container nft-sticker-top-right';
+    stickerContainer.className = 'nft-sticker-container nft-sticker-top-left';
     stickerContainer.style.width = '60px';
     stickerContainer.style.height = '60px';
     stickerContainer.style.position = 'absolute';
     stickerContainer.style.zIndex = '999';
     stickerContainer.style.pointerEvents = 'none';
+    stickerContainer.style.transform = 'rotate(-45deg)';
 
-    // Position sticker relative to avatar frame
-    const avatarRect = avatarFrame.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-
-    // Calculate position to place sticker in top-right corner of avatar frame
-    const stickerTop = (avatarRect.top - containerRect.top) - 10;
-    const stickerRight = (containerRect.right - avatarRect.right) - 10;
-
-    stickerContainer.style.top = stickerTop + 'px';
-    stickerContainer.style.right = stickerRight + 'px';
-    stickerContainer.style.transform = 'rotate(45deg)';
-
-    // Add container to mosaic container (outside avatar frame)
+    // Add sticker to container but position it relative to avatar frame
     container.appendChild(stickerContainer);
+
+    // Set initial position relative to avatar frame
+    updateStickerPosition(avatarFrame, stickerContainer);
 
     // Load and play TGS animation
     try {
-      const animationData = await loadTGSAnimation('temp_bio/assets/sticker.tgs');
+      const animationData = await loadTGSAnimation('assets/sticker.tgs');
       playLottieAnimation(stickerContainer, animationData);
 
       // Add hover effects
       avatarFrame.addEventListener('mouseenter', () => {
         stickerContainer.style.transform = 'scale(1.1)';
+        // Update position when frame scales up
+        setTimeout(() => {
+          updateStickerPosition(avatarFrame, stickerContainer);
+        }, 10);
       });
 
       avatarFrame.addEventListener('mouseleave', () => {
         stickerContainer.style.transform = 'scale(1)';
+        // Update position when frame scales down
+        setTimeout(() => {
+          updateStickerPosition(avatarFrame, stickerContainer);
+        }, 10);
       });
     } catch (error) {
       console.error('Error loading NFT sticker animation:', error);
       // Fallback to static image if animation fails
       const fallbackSticker = document.createElement('div');
       fallbackSticker.className = 'nft-sticker nft-sticker-top-right';
-      fallbackSticker.style.backgroundImage = 'url("temp_bio/assets/sticker.tgs")';
+      fallbackSticker.style.backgroundImage = 'url("assets/sticker.tgs")';
       avatarFrame.appendChild(fallbackSticker);
     }
   }
@@ -252,6 +279,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
       // Update container size
       container.style.width = rectW + 'px';
       container.style.height = rectH + 'px';
+      
+      // Update sticker position for responsiveness
+      const avatarFrame = container.querySelector('.avatar-frame');
+      const stickerContainer = container.querySelector('.nft-sticker-container');
+      if (avatarFrame && stickerContainer) {
+        updateStickerPosition(avatarFrame, stickerContainer);
+      }
     }, 100);
   });
 

@@ -209,7 +209,7 @@ body {
     }
 }
 
-/* NFT Sticker styles - теперь стикер находится НАД рамкой! */
+/* NFT Sticker styles - стикер привязан к рамке аватара! */
 .nft-sticker-container {
     position: absolute;
     width: 60px;
@@ -217,17 +217,69 @@ body {
     z-index: 999; /* Самый передний план - стикер поверх всего! */
     pointer-events: none;
     transition: transform 0.3s ease;
-    transform: rotate(45deg);
+    transform: rotate(-45deg);
 }
 
-/* Позиционирование стикера - настройте эти значения для перемещения
-   Теперь стикер прикреплен к контейнеру мозаики, а не к рамке аватара,
-   поэтому он находится НАД рамкой и полностью виден! */
+/* Позиционирование стикера - теперь стикер привязан к рамке аватара */
+.nft-sticker-top-left {
+    /* Позиция относительно рамки аватара */
+    top: -5px; /* Смещение вверх от верхнего края рамки */
+    left: -5px; /* Смещение влево от левого края рамки */
+}
 
-.nft-sticker-top-right {
-    /* Эти значения теперь относительно контейнера мозаики */
-    top: 10px; /* Поднять выше - уменьшите значение (например, 5px, 0px) */
-    right: 10px; /* Сдвинуть правее - уменьшите значение (например, 5px, 0px) */
+/* Адаптивность стикера - аналогично рамке аватара */
+@media (max-width: 480px) {
+    .nft-sticker-container {
+        width: 40px;
+        height: 40px;
+        transform: rotate(-30deg);
+    }
+    .nft-sticker-top-left {
+        top: -3px;
+        left: -3px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .nft-sticker-container {
+        width: 50px;
+        height: 50px;
+        transform: rotate(-35deg);
+    }
+    .nft-sticker-top-left {
+        top: -4px;
+        left: -4px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .nft-sticker-container {
+        width: 55px;
+        height: 55px;
+        transform: rotate(-40deg);
+    }
+    .nft-sticker-top-left {
+        top: -4px;
+        left: -4px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .nft-sticker-container {
+        width: 60px;
+        height: 60px;
+        transform: rotate(-45deg);
+    }
+    .nft-sticker-top-left {
+        top: -5px;
+        left: -5px;
+    }
+}
+
+/* Стикер в нижнем левом углу */
+.nft-sticker-bottom-left {
+    bottom: -15px; /* Смещение вниз от нижнего края рамки */
+    left: -15px; /* Смещение влево от левого края рамки */
 }
 
 /* ИНСТРУКЦИИ ПО НАСТРОЙКЕ ПОЗИЦИИ СТИКЕРА:
@@ -276,6 +328,35 @@ body {
     z-index: 11;
     pointer-events: none;
     animation: stickerBounce 3s ease-in-out infinite;
+}
+
+/* Адаптивность fallback стикера */
+@media (max-width: 480px) {
+    .nft-sticker {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .nft-sticker {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .nft-sticker {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .nft-sticker {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 @keyframes stickerBounce {
